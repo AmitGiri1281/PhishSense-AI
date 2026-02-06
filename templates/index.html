@@ -3,74 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔐 PhishSense AI - Phishing Detection System</title>
+    <title>🔐 PhishSense AI Pro - Advanced Phishing Detection</title>
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Navigation Header -->
     <header class="header">
         <div class="container">
-            <div class="logo">
-                <i class="fas fa-shield-alt"></i>
-                <h1>PhishSense AI</h1>
+            <div class="logo-area">
+                <div class="logo">
+                    <i class="fas fa-shield-halved"></i>
+                    <div>
+                        <h1>PhishSense AI <span class="pro-badge">PRO</span></h1>
+                        <p class="tagline">Advanced NLP & Machine Learning Phishing Detection</p>
+                    </div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <i class="fas fa-brain"></i>
+                        <span>AI-Powered</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-bolt"></i>
+                        <span>Real-time Analysis</span>
+                    </div>
+                </div>
             </div>
-            <p class="tagline">Advanced AI-powered phishing message detection</p>
         </div>
     </header>
 
     <main class="container">
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <h2><i class="fas fa-robot"></i> AI-Powered Protection</h2>
-                <p>Paste any email, SMS, or chat message below to analyze it for phishing attempts using our AI detection system.</p>
-            </div>
-        </section>
+        <!-- Alert Banner -->
+        <div class="alert-banner">
+            <i class="fas fa-triangle-exclamation"></i>
+            <p><strong>Security Tip:</strong> This tool analyzes message content. Always verify suspicious messages through official channels.</p>
+        </div>
 
         <!-- Main Input Section -->
         <section class="input-section">
-            <form method="POST" class="analysis-form">
+            <div class="section-header">
+                <h2><i class="fas fa-magnifying-glass-chart"></i> Message Analyzer</h2>
+                <p class="section-subtitle">Paste any suspicious email, SMS, or message for AI-powered phishing detection</p>
+            </div>
+
+            <form method="POST" class="analysis-form" id="analysisForm">
                 <div class="form-group">
-                    <label for="message">
-                        <i class="fas fa-envelope"></i> Message to Analyze:
-                    </label>
+                    <div class="form-header">
+                        <label for="message">
+                            <i class="fas fa-envelope-open-text"></i> Enter Message
+                        </label>
+                        <div class="form-tools">
+                            <button type="button" class="tool-btn" id="clearFormatting" title="Clear formatting">
+                                <i class="fas fa-broom"></i>
+                            </button>
+                            <button type="button" class="tool-btn" id="expandEditor" title="Expand editor">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
                     <textarea 
                         id="message" 
                         name="message" 
-                        placeholder="Paste your suspicious email, SMS, or message here...
+                        placeholder="🔍 Paste suspicious message here...
                         
-Example: 'URGENT: Your account has been compromised. Click here to verify: http://bit.ly/verify-now'"
-                        required>{{ result.original_text if result else '' }}</textarea>
+💬 Examples:
+• 'URGENT: Your bank account is SUSPENDED. Click http://bit.ly/secure-login NOW!'
+• 'PayPal Security Alert: Verify your account immediately'
+• 'Microsoft: Your account needs attention. Update now!'
+
+📊 Our AI will analyze: Keywords, URLs, Urgency, Tone, and Patterns..."
+                        required
+                        rows="8">{{ result.original_text if result else '' }}</textarea>
                     
-                    <div class="char-count">
-                        <span id="charCount">0</span> characters
+                    <div class="form-footer">
+                        <div class="char-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-text-height"></i>
+                                <span id="charCount">0</span> chars
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-font"></i>
+                                <span id="wordCount">0</span> words
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-link"></i>
+                                <span id="urlCount">0</span> URLs
+                            </div>
+                        </div>
+                        <div class="form-hints">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Tip: Include URLs and full message for better analysis</span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn analyze-btn">
-                        <i class="fas fa-search"></i> Analyze Message
+                    <button type="submit" class="btn analyze-btn" id="analyzeBtn">
+                        <i class="fas fa-robot"></i>
+                        <span>Analyze with AI</span>
+                        <div class="loading-spinner" id="loadingSpinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
                     </button>
-                    <button type="button" class="btn clear-btn" id="clearBtn">
-                        <i class="fas fa-eraser"></i> Clear
+                    <button type="button" class="btn secondary-btn" id="clearBtn">
+                        <i class="fas fa-eraser"></i> Clear All
+                    </button>
+                    <button type="button" class="btn tertiary-btn" id="quickTestBtn">
+                        <i class="fas fa-vial"></i> Quick Test
                     </button>
                 </div>
             </form>
         </section>
 
-        <!-- Example Messages -->
+        <!-- Quick Example Cards -->
         <section class="examples-section">
-            <h3><i class="fas fa-lightbulb"></i> Try These Examples:</h3>
+            <div class="section-header">
+                <h3><i class="fas fa-flask"></i> Test with Examples</h3>
+                <p>Try these real-world phishing scenarios</p>
+            </div>
+            
             <div class="examples-grid">
                 {% for example in examples %}
-                <div class="example-card {{ example.type }}">
-                    <h4>{{ example.title }}</h4>
+                <div class="example-card {{ example.type }}" data-severity="{{ example.expected_risk }}">
+                    <div class="example-header">
+                        <div class="example-indicator {{ example.expected_risk }}"></div>
+                        <h4>{{ example.title }}</h4>
+                        <span class="example-tag {{ example.type }}">{{ example.type|upper }}</span>
+                    </div>
                     <p class="example-text">{{ example.text }}</p>
-                    <button class="btn use-example-btn" data-text="{{ example.text }}">
-                        <i class="fas fa-play"></i> Use This Example
-                    </button>
+                    <div class="example-footer">
+                        <button class="btn example-btn" data-text="{{ example.text }}">
+                            <i class="fas fa-play-circle"></i> Test This
+                        </button>
+                        <div class="expected-risk">
+                            <i class="fas fa-chart-line"></i>
+                            Expected: <strong>{{ example.expected_risk|replace('_', ' ')|title }}</strong>
+                        </div>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
@@ -78,88 +151,295 @@ Example: 'URGENT: Your account has been compromised. Click here to verify: http:
 
         <!-- Results Section -->
         {% if result %}
-        <section class="results-section">
-            <div class="result-header" style="border-left-color: {{ result.color }};">
-                <h3><i class="fas fa-chart-bar"></i> Analysis Results</h3>
-                <div class="classification-badge" style="background-color: {{ result.color }};">
-                    {{ result.classification }}
+        <section class="results-section" id="resultsSection">
+            <div class="section-header">
+                <h3><i class="fas fa-file-contract"></i> Analysis Report</h3>
+                <div class="report-meta">
+                    <span><i class="fas fa-clock"></i> {{ result.timestamp }}</span>
+                    <button class="btn small-btn" id="exportReport">
+                        <i class="fas fa-download"></i> Export
+                    </button>
                 </div>
             </div>
 
-            <!-- Risk Score -->
-            <div class="risk-score">
-                <div class="score-display">
-                    <h4>Risk Score: <span class="score-value">{{ result.risk_score }}/10</span></h4>
-                    <div class="score-bar">
-                        <div class="score-fill" style="width: {{ result.risk_score * 10 }}%; background-color: {{ result.color }};"></div>
+            <!-- Risk Overview -->
+            <div class="risk-overview" style="border-color: {{ result.color }}; background: linear-gradient(135deg, {{ result.color }}10, transparent);">
+                <div class="risk-header">
+                    <div class="risk-classification">
+                        <div class="classification-badge" style="background-color: {{ result.color }};">
+                            <i class="fas fa-{{ 'triangle-exclamation' if result.severity == 'critical' else 'exclamation-circle' if result.severity == 'high' else 'warning' if result.severity == 'medium' else 'check-circle' }}"></i>
+                            {{ result.classification }}
+                        </div>
+                        <div class="confidence-level">
+                            <i class="fas fa-chart-line"></i>
+                            Confidence: <strong>{{ result.confidence }}</strong>
+                        </div>
                     </div>
-                    <p class="confidence">Confidence: {{ result.confidence }}</p>
+                    
+                    <div class="risk-score-display">
+                        <div class="score-circle" style="--score-color: {{ result.color }};">
+                            <svg width="120" height="120">
+                                <circle class="score-bg" cx="60" cy="60" r="54"></circle>
+                                <circle class="score-progress" cx="60" cy="60" r="54" 
+                                        stroke-dasharray="{{ result.risk_score * 33.9 }} 339"
+                                        style="stroke: {{ result.color }};"></circle>
+                            </svg>
+                            <div class="score-value">{{ result.risk_score }}</div>
+                            <div class="score-label">/10</div>
+                        </div>
+                        <div class="score-details">
+                            <div class="severity-indicator {{ result.severity }}">
+                                <i class="fas fa-{{ 'skull-crossbones' if result.severity == 'critical' else 'fire' if result.severity == 'high' else 'exclamation-triangle' if result.severity == 'medium' else 'shield-check' }}"></i>
+                                {{ result.severity|upper }} SEVERITY
+                            </div>
+                            <p class="score-description">
+                                {{ 'Extreme risk detected' if result.risk_score >= 8 
+                                   else 'High risk indicators' if result.risk_score >= 6
+                                   else 'Moderate concerns' if result.risk_score >= 4
+                                   else 'Low risk profile' if result.risk_score >= 2
+                                   else 'Minimal risk' }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Detected Features -->
-            <div class="features-grid">
-                <div class="feature-card">
-                    <h5><i class="fas fa-exclamation-triangle"></i> Urgency Indicators</h5>
-                    <p class="feature-count">{{ result.features.urgent_words }}</p>
+                <!-- Feature Breakdown -->
+                <div class="features-breakdown">
+                    <h4><i class="fas fa-microscope"></i> Detailed Analysis</h4>
+                    <div class="features-grid">
+                        <div class="feature-card threat">
+                            <div class="feature-header">
+                                <i class="fas fa-biohazard"></i>
+                                <h5>Threat Score</h5>
+                            </div>
+                            <div class="feature-value">{{ result.features.threat_score|round(1) }}</div>
+                            <div class="feature-bar">
+                                <div class="bar-fill" style="width: {{ (result.features.threat_score / 5) * 100 }}%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-card auth">
+                            <div class="feature-header">
+                                <i class="fas fa-user-lock"></i>
+                                <h5>Authentication</h5>
+                            </div>
+                            <div class="feature-value">{{ result.features.auth_score|round(1) }}</div>
+                            <div class="feature-bar">
+                                <div class="bar-fill" style="width: {{ (result.features.auth_score / 5) * 100 }}%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-card financial">
+                            <div class="feature-header">
+                                <i class="fas fa-sack-dollar"></i>
+                                <h5>Financial</h5>
+                            </div>
+                            <div class="feature-value">{{ result.features.financial_score|round(1) }}</div>
+                            <div class="feature-bar">
+                                <div class="bar-fill" style="width: {{ (result.features.financial_score / 5) * 100 }}%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-card impersonation">
+                            <div class="feature-header">
+                                <i class="fas fa-mask"></i>
+                                <h5>Impersonation</h5>
+                            </div>
+                            <div class="feature-value">{{ result.features.impersonation_score|round(1) }}</div>
+                            <div class="feature-bar">
+                                <div class="bar-fill" style="width: {{ (result.features.impersonation_score / 5) * 100 }}%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-card url">
+                            <div class="feature-header">
+                                <i class="fas fa-link"></i>
+                                <h5>Suspicious URLs</h5>
+                            </div>
+                            <div class="feature-value">{{ result.features.suspicious_urls }}</div>
+                            <div class="feature-detail">of {{ result.features.total_urls }} total</div>
+                        </div>
+                        
+                        <div class="feature-card urgency">
+                            <div class="feature-header">
+                                <i class="fas fa-clock-rotate-left"></i>
+                                <h5>Urgency</h5>
+                            </div>
+                            <div class="feature-value">
+                                {% if result.features.sense_of_urgency %}
+                                <i class="fas fa-check" style="color: #dc2626;"></i> Detected
+                                {% else %}
+                                <i class="fas fa-times" style="color: #16a34a;"></i> Not Detected
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <h5><i class="fas fa-key"></i> Authentication Terms</h5>
-                    <p class="feature-count">{{ result.features.authentication_terms }}</p>
-                </div>
-                <div class="feature-card">
-                    <h5><i class="fas fa-money-bill-wave"></i> Financial Keywords</h5>
-                    <p class="feature-count">{{ result.features.financial_keywords }}</p>
-                </div>
-                <div class="feature-card">
-                    <h5><i class="fas fa-link"></i> Links Found</h5>
-                    <p class="feature-count">{{ result.features.links_present }}</p>
-                </div>
-            </div>
 
-            <!-- Detected Keywords -->
-            {% if result.detected_keywords %}
-            <div class="keywords-section">
-                <h5><i class="fas fa-search"></i> Detected Suspicious Keywords:</h5>
-                <div class="keywords-list">
-                    {% for keyword in result.detected_keywords %}
-                    <span class="keyword-badge">{{ keyword }}</span>
-                    {% endfor %}
+                <!-- Detected Keywords -->
+                <div class="keywords-section">
+                    <h4><i class="fas fa-search-plus"></i> Detected Indicators</h4>
+                    <div class="keywords-container">
+                        {% for category, keywords in result.detected_keywords.items() %}
+                        {% if keywords %}
+                        <div class="keyword-category">
+                            <h5>{{ category|replace('_', ' ')|title }}</h5>
+                            <div class="keyword-list">
+                                {% for keyword in keywords %}
+                                <span class="keyword-badge {{ category }}">
+                                    {{ keyword }}
+                                    <i class="fas fa-{{ 'biohazard' if category == 'threat_keywords' else 'key' if category == 'auth_keywords' else 'money-bill-wave' if category == 'financial_keywords' else 'user-secret' }}"></i>
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-            {% endif %}
 
-            <!-- Security Advice -->
-            <div class="advice-card" style="border-color: {{ result.color }};">
-                <h5><i class="fas fa-shield-alt"></i> Security Advice</h5>
-                <p>{{ result.advice }}</p>
+                <!-- URL Analysis -->
+                {% if result.features.url_details %}
+                <div class="url-analysis">
+                    <h4><i class="fas fa-globe"></i> URL Analysis</h4>
+                    <div class="url-list">
+                        {% for url_info in result.features.url_details %}
+                        <div class="url-item {% if url_info.is_shortener or url_info.has_suspicious_tld %}suspicious{% endif %}">
+                            <div class="url-header">
+                                <div class="url-status">
+                                    {% if url_info.is_shortener %}
+                                    <i class="fas fa-compress" title="URL Shortener"></i>
+                                    {% elif url_info.has_suspicious_tld %}
+                                    <i class="fas fa-flag" title="Suspicious TLD"></i>
+                                    {% elif url_info.is_ip_address %}
+                                    <i class="fas fa-server" title="IP Address"></i>
+                                    {% else %}
+                                    <i class="fas fa-link"></i>
+                                    {% endif %}
+                                </div>
+                                <code class="url-text">{{ url_info.original|truncate(60) }}</code>
+                            </div>
+                            <div class="url-flags">
+                                {% if url_info.is_shortener %}
+                                <span class="url-flag warning">Shortener</span>
+                                {% endif %}
+                                {% if url_info.has_suspicious_tld %}
+                                <span class="url-flag danger">Suspicious TLD</span>
+                                {% endif %}
+                                {% if url_info.is_ip_address %}
+                                <span class="url-flag danger">IP Address</span>
+                                {% endif %}
+                                {% if url_info.has_login_keywords %}
+                                <span class="url-flag warning">Login Keywords</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Feature Explanations -->
+                {% if result.feature_explanations %}
+                <div class="explanations-section">
+                    <h4><i class="fas fa-comment-dots"></i> AI Insights</h4>
+                    <div class="insights-list">
+                        {% for explanation in result.feature_explanations %}
+                        <div class="insight-item">
+                            <i class="fas fa-{{ 'triangle-exclamation' if 'suspicious' in explanation or 'threat' in explanation else 'info-circle' }}"></i>
+                            <span>{{ explanation }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Security Recommendations -->
+                <div class="recommendations-section">
+                    <h4><i class="fas fa-shield-check"></i> Security Recommendations</h4>
+                    <div class="recommendations-grid">
+                        {% for recommendation in result.recommendations %}
+                        <div class="recommendation-card">
+                            <div class="rec-number">{{ loop.index }}</div>
+                            <div class="rec-content">
+                                <p>{{ recommendation }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Processed Text Preview -->
+                <div class="processed-section">
+                    <h4><i class="fas fa-code"></i> Processed Text</h4>
+                    <div class="processed-preview">
+                        <pre>{{ result.processed_text }}</pre>
+                    </div>
+                    <div class="text-stats">
+                        <div class="text-stat">
+                            <i class="fas fa-font"></i>
+                            <span>{{ result.processed_text|length }} characters processed</span>
+                        </div>
+                        <div class="text-stat">
+                            <i class="fas fa-filter"></i>
+                            <span>Normalized for AI analysis</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         {% endif %}
 
         <!-- How It Works -->
-        <section class="info-section">
-            <h3><i class="fas fa-cogs"></i> How It Works</h3>
-            <div class="steps-grid">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h4>Text Processing</h4>
-                    <p>Message is normalized and cleaned for analysis</p>
+        <section class="how-it-works">
+            <div class="section-header">
+                <h3><i class="fas fa-cogs"></i> How PhishSense AI Works</h3>
+                <p>Advanced multi-layer detection system</p>
+            </div>
+            
+            <div class="workflow">
+                <div class="workflow-step">
+                    <div class="step-icon">
+                        <i class="fas fa-text-height"></i>
+                    </div>
+                    <h4>1. Text Processing</h4>
+                    <p>Normalization, URL decoding, and cleanup</p>
                 </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h4>Feature Extraction</h4>
-                    <p>AI extracts phishing indicators like urgency, links, and keywords</p>
+                
+                <div class="workflow-arrow">
+                    <i class="fas fa-arrow-right"></i>
                 </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h4>Risk Scoring</h4>
-                    <p>Weighted scoring system calculates risk level</p>
+                
+                <div class="workflow-step">
+                    <div class="step-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4>2. Feature Extraction</h4>
+                    <p>Keyword analysis, URL checks, and pattern detection</p>
                 </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <h4>Classification</h4>
-                    <p>Message is classified as Safe, Suspicious, or Phishing</p>
+                
+                <div class="workflow-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="step-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h4>3. Risk Scoring</h4>
+                    <p>Weighted ML-inspired scoring algorithm</p>
+                </div>
+                
+                <div class="workflow-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="step-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h4>4. Classification</h4>
+                    <p>Multi-level threat categorization</p>
                 </div>
             </div>
         </section>
@@ -168,59 +448,280 @@ Example: 'URGENT: Your account has been compromised. Click here to verify: http:
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>PhishSense AI &copy; 2024 | AI-Powered Cybersecurity Tool</p>
-            <p class="footer-info">
-                <i class="fas fa-info-circle"></i> 
-                This tool uses rule-based AI detection. Always use multiple security measures.
-            </p>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-shield-halved"></i>
+                        <h3>PhishSense AI Pro</h3>
+                    </div>
+                    <p class="footer-tagline">Advanced phishing detection powered by AI & NLP</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-section">
+                        <h5>Detection Features</h5>
+                        <ul>
+                            <li>Keyword Analysis</li>
+                            <li>URL Pattern Detection</li>
+                            <li>Urgency Scoring</li>
+                            <li>Brand Impersonation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h5>Security</h5>
+                        <ul>
+                            <li>No Data Storage</li>
+                            <li>Real-time Analysis</li>
+                            <li>Privacy Focused</li>
+                            <li>Open Source Core</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 PhishSense AI Pro | AI-Powered Cybersecurity | v2.0</p>
+                <div class="footer-disclaimer">
+                    <i class="fas fa-info-circle"></i>
+                    <p>This tool aids in phishing detection but should not be your only security measure.</p>
+                </div>
+            </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
     <script>
-        // Character counter
+        // DOM Elements
         const textarea = document.getElementById('message');
         const charCount = document.getElementById('charCount');
+        const wordCount = document.getElementById('wordCount');
+        const urlCount = document.getElementById('urlCount');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const form = document.getElementById('analysisForm');
         
-        textarea.addEventListener('input', function() {
-            charCount.textContent = this.value.length;
-        });
+        // Initialize counters
+        function updateCounters() {
+            const text = textarea.value;
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+            const urls = text.match(/(https?:\/\/[^\s]+|www\.[^\s]+)/gi) || [];
+            
+            charCount.textContent = text.length;
+            wordCount.textContent = words.length;
+            urlCount.textContent = urls.length;
+        }
+        
+        // Auto-resize textarea
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 400) + 'px';
+        }
         
         // Clear button functionality
         document.getElementById('clearBtn').addEventListener('click', function() {
-            textarea.value = '';
-            charCount.textContent = '0';
-            textarea.focus();
+            if (confirm('Clear the message text?')) {
+                textarea.value = '';
+                updateCounters();
+                autoResize(textarea);
+                textarea.focus();
+                
+                // Scroll to top if results are shown
+                if (document.getElementById('resultsSection')) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        });
+        
+        // Clear formatting button
+        document.getElementById('clearFormatting')?.addEventListener('click', function() {
+            textarea.value = textarea.value
+                .replace(/\s+/g, ' ')
+                .replace(/\n{3,}/g, '\n\n')
+                .trim();
+            updateCounters();
+            autoResize(textarea);
+        });
+        
+        // Expand editor button
+        document.getElementById('expandEditor')?.addEventListener('click', function() {
+            textarea.style.height = textarea.style.height === '400px' ? 'auto' : '400px';
+            this.innerHTML = textarea.style.height === '400px' ? 
+                '<i class="fas fa-compress"></i>' : 
+                '<i class="fas fa-expand"></i>';
         });
         
         // Example buttons functionality
-        document.querySelectorAll('.use-example-btn').forEach(button => {
+        document.querySelectorAll('.example-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const text = this.getAttribute('data-text');
                 textarea.value = text;
-                charCount.textContent = text.length;
+                updateCounters();
+                autoResize(textarea);
                 textarea.focus();
                 
-                // Scroll to input section
+                // Show analysis button hint
+                analyzeBtn.classList.add('pulse');
+                setTimeout(() => analyzeBtn.classList.remove('pulse'), 2000);
+                
+                // Scroll to input
                 document.querySelector('.input-section').scrollIntoView({
                     behavior: 'smooth'
                 });
             });
         });
         
-        // Auto-resize textarea
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight) + 'px';
-        }
-        
-        textarea.addEventListener('input', function() {
-            autoResize(this);
+        // Quick test button
+        document.getElementById('quickTestBtn')?.addEventListener('click', function() {
+            const examples = [
+                "URGENT: Your PayPal account has been LOCKED due to suspicious activity! Click http://bit.ly/paypal-secure-verify NOW to restore access.",
+                "Microsoft Security Alert: Unusual sign-in detected. Verify your account immediately: https://microsoft-verify.xyz/login",
+                "Your bank account statement is ready. Click to view: https://your-bank.com/secure-login"
+            ];
+            
+            const randomExample = examples[Math.floor(Math.random() * examples.length)];
+            textarea.value = randomExample;
+            updateCounters();
+            autoResize(textarea);
+            
+            // Auto-submit after 1 second
+            setTimeout(() => {
+                if (confirm('Run analysis on this test message?')) {
+                    form.submit();
+                }
+            }, 1000);
         });
         
-        // Initialize on load
-        autoResize(textarea);
-        charCount.textContent = textarea.value.length;
+        // Export report button
+        document.getElementById('exportReport')?.addEventListener('click', function() {
+            const reportContent = document.getElementById('resultsSection').innerText;
+            const blob = new Blob([reportContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `phishsense-report-${new Date().toISOString().slice(0,10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            // Show notification
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = '<i class="fas fa-check"></i> Report exported successfully!';
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        });
+        
+        // Form submission with loading state
+        form.addEventListener('submit', function(e) {
+            if (textarea.value.trim().length < 10) {
+                e.preventDefault();
+                alert('Please enter a message with at least 10 characters for analysis.');
+                textarea.focus();
+                return;
+            }
+            
+            // Show loading state
+            analyzeBtn.disabled = true;
+            loadingSpinner.style.display = 'block';
+            analyzeBtn.querySelector('span').textContent = 'Analyzing...';
+        });
+        
+        // URL detection and highlighting
+        function detectAndHighlightURLs(text) {
+            const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/gi;
+            return text.replace(urlRegex, '<span class="url-highlight">$&</span>');
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCounters();
+            autoResize(textarea);
+            
+            // Add URL highlighting to textarea preview
+            textarea.addEventListener('input', function() {
+                updateCounters();
+                autoResize(this);
+            });
+            
+            // Focus textarea on page load
+            if (!textarea.value) {
+                textarea.focus();
+            }
+            
+            // Add animation to results section if present
+            const resultsSection = document.getElementById('resultsSection');
+            if (resultsSection) {
+                resultsSection.style.opacity = '0';
+                resultsSection.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    resultsSection.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    resultsSection.style.opacity = '1';
+                    resultsSection.style.transform = 'translateY(0)';
+                }, 100);
+            }
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + Enter to submit
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                form.dispatchEvent(new Event('submit'));
+            }
+            
+            // Ctrl/Cmd + K to clear
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('clearBtn').click();
+            }
+            
+            // Escape to blur textarea
+            if (e.key === 'Escape' && document.activeElement === textarea) {
+                textarea.blur();
+            }
+        });
     </script>
+    
+    <style>
+        /* Additional inline styles for enhanced visuals */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #16a34a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        
+        .url-highlight {
+            background: #fef3c7;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
 </body>
 </html>
