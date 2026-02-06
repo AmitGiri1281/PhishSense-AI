@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 PhishSense AI - Phishing Detection System</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>PhishSense AI</h1>
+            </div>
+            <p class="tagline">Advanced AI-powered phishing message detection</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h2><i class="fas fa-robot"></i> AI-Powered Protection</h2>
+                <p>Paste any email, SMS, or chat message below to analyze it for phishing attempts using our AI detection system.</p>
+            </div>
+        </section>
+
+        <!-- Main Input Section -->
+        <section class="input-section">
+            <form method="POST" class="analysis-form">
+                <div class="form-group">
+                    <label for="message">
+                        <i class="fas fa-envelope"></i> Message to Analyze:
+                    </label>
+                    <textarea 
+                        id="message" 
+                        name="message" 
+                        placeholder="Paste your suspicious email, SMS, or message here...
+                        
+Example: 'URGENT: Your account has been compromised. Click here to verify: http://bit.ly/verify-now'"
+                        required>{{ result.original_text if result else '' }}</textarea>
+                    
+                    <div class="char-count">
+                        <span id="charCount">0</span> characters
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn analyze-btn">
+                        <i class="fas fa-search"></i> Analyze Message
+                    </button>
+                    <button type="button" class="btn clear-btn" id="clearBtn">
+                        <i class="fas fa-eraser"></i> Clear
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Example Messages -->
+        <section class="examples-section">
+            <h3><i class="fas fa-lightbulb"></i> Try These Examples:</h3>
+            <div class="examples-grid">
+                {% for example in examples %}
+                <div class="example-card {{ example.type }}">
+                    <h4>{{ example.title }}</h4>
+                    <p class="example-text">{{ example.text }}</p>
+                    <button class="btn use-example-btn" data-text="{{ example.text }}">
+                        <i class="fas fa-play"></i> Use This Example
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        {% if result %}
+        <section class="results-section">
+            <div class="result-header" style="border-left-color: {{ result.color }};">
+                <h3><i class="fas fa-chart-bar"></i> Analysis Results</h3>
+                <div class="classification-badge" style="background-color: {{ result.color }};">
+                    {{ result.classification }}
+                </div>
+            </div>
+
+            <!-- Risk Score -->
+            <div class="risk-score">
+                <div class="score-display">
+                    <h4>Risk Score: <span class="score-value">{{ result.risk_score }}/10</span></h4>
+                    <div class="score-bar">
+                        <div class="score-fill" style="width: {{ result.risk_score * 10 }}%; background-color: {{ result.color }};"></div>
+                    </div>
+                    <p class="confidence">Confidence: {{ result.confidence }}</p>
+                </div>
+            </div>
+
+            <!-- Detected Features -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h5><i class="fas fa-exclamation-triangle"></i> Urgency Indicators</h5>
+                    <p class="feature-count">{{ result.features.urgent_words }}</p>
+                </div>
+                <div class="feature-card">
+                    <h5><i class="fas fa-key"></i> Authentication Terms</h5>
+                    <p class="feature-count">{{ result.features.authentication_terms }}</p>
+                </div>
+                <div class="feature-card">
+                    <h5><i class="fas fa-money-bill-wave"></i> Financial Keywords</h5>
+                    <p class="feature-count">{{ result.features.financial_keywords }}</p>
+                </div>
+                <div class="feature-card">
+                    <h5><i class="fas fa-link"></i> Links Found</h5>
+                    <p class="feature-count">{{ result.features.links_present }}</p>
+                </div>
+            </div>
+
+            <!-- Detected Keywords -->
+            {% if result.detected_keywords %}
+            <div class="keywords-section">
+                <h5><i class="fas fa-search"></i> Detected Suspicious Keywords:</h5>
+                <div class="keywords-list">
+                    {% for keyword in result.detected_keywords %}
+                    <span class="keyword-badge">{{ keyword }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Security Advice -->
+            <div class="advice-card" style="border-color: {{ result.color }};">
+                <h5><i class="fas fa-shield-alt"></i> Security Advice</h5>
+                <p>{{ result.advice }}</p>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- How It Works -->
+        <section class="info-section">
+            <h3><i class="fas fa-cogs"></i> How It Works</h3>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Text Processing</h4>
+                    <p>Message is normalized and cleaned for analysis</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Feature Extraction</h4>
+                    <p>AI extracts phishing indicators like urgency, links, and keywords</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Risk Scoring</h4>
+                    <p>Weighted scoring system calculates risk level</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Classification</h4>
+                    <p>Message is classified as Safe, Suspicious, or Phishing</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>PhishSense AI &copy; 2024 | AI-Powered Cybersecurity Tool</p>
+            <p class="footer-info">
+                <i class="fas fa-info-circle"></i> 
+                This tool uses rule-based AI detection. Always use multiple security measures.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Character counter
+        const textarea = document.getElementById('message');
+        const charCount = document.getElementById('charCount');
+        
+        textarea.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+        });
+        
+        // Clear button functionality
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            textarea.value = '';
+            charCount.textContent = '0';
+            textarea.focus();
+        });
+        
+        // Example buttons functionality
+        document.querySelectorAll('.use-example-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const text = this.getAttribute('data-text');
+                textarea.value = text;
+                charCount.textContent = text.length;
+                textarea.focus();
+                
+                // Scroll to input section
+                document.querySelector('.input-section').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Auto-resize textarea
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+        
+        textarea.addEventListener('input', function() {
+            autoResize(this);
+        });
+        
+        // Initialize on load
+        autoResize(textarea);
+        charCount.textContent = textarea.value.length;
+    </script>
+</body>
+</html>
